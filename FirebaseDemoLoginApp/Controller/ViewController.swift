@@ -30,6 +30,17 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate {
         SetKeyboardNotification()
         Tapgesture()
         SetProfilImageView()
+        
+        if UserDefaults.standard.bool(forKey: "UserLogin") == true
+        {
+            let navigation = self.storyboard?.instantiateViewController(withIdentifier: "MainPageViewController")
+            
+            self.navigationController?.pushViewController(navigation!, animated: false)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        ClearTextFieldf()
     }
     
     func Alert(title:String?,message:String,prefferedstyle:UIAlertController.Style)
@@ -97,16 +108,22 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate {
             MKProgress.show()
             
             Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
-                if error != nil
+                if error == nil
                 {
-                    self.Alert(title: "Error", message: "\(String(describing: error!.localizedDescription))", prefferedstyle: .alert)
+                    UserDefaults.standard.set(true, forKey: "UserLogin")
+                    
+                    MKProgress.hide()
+                    let navigation = self.storyboard?.instantiateViewController(withIdentifier: "MainPageViewController")
+                    
+                    self.navigationController?.pushViewController(navigation!, animated: true)
+                    
                 }
-                
-             MKProgress.hide()
-            
-                let navigation = self.storyboard?.instantiateViewController(withIdentifier: "MainPageViewController")
-                self.navigationController?.pushViewController(navigation!, animated: true)
-            
+                else
+                {
+                    MKProgress.hide()
+                    self.Alert(title: "Error", message: "User Id or Password Does not exist.", prefferedstyle: .alert)
+                    self.ClearTextFieldf()
+                }
             }
         }
         else
@@ -119,7 +136,7 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate {
             print("not valid form")
             return
         }
-            
+        
             Auth.auth().createUser(withEmail: email, password: password, completion: { (user, error) in
                 
                 if error != nil
@@ -136,25 +153,50 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate {
                 }
                 
                 MKProgress.show()
-                let userreferences = ref.child("users").child((user?.user.uid)!);           let values = ["name":name,"email":email,"password":password]
-                userreferences.updateChildValues(values, withCompletionBlock: { (error, ref) in
-                            if error != nil
-                            {
-                                self.Alert(title: "Error", message: "\(String(describing: error!.localizedDescription))", prefferedstyle: .alert)
-                            }
-                 
+
+                let userreferences = ref.child("users").child((user?.user.uid)!)
+                let imagename = NSUUID().uuidString
+                let Storageref = Storage.storage().reference().child("\(imagename).jpg")
+                
+                if let profileImage = self.ProfileImage.image?.jpegData(compressionQuality: 0.3)
+                {
+                    Storageref.putData(profileImage, metadata: nil, completion: { (metadata, err) in
+                        if error != nil
+                        {
+                            self.Alert(title: "Error", message: "Uploading Error", prefferedstyle: .alert)
+                            return
+                        }
+                        
+                        
+                        Storageref.downloadURL(completion: { (url, error) in
+                        
+                            let values = ["name":name,"email":email,"password":password,"ProfileImageURL":url?.absoluteString]
+                            print("Values:",values)
                             
-                    print("Save Data Successfully with userId : \(String(describing: user!.user.uid))")
-                    MKProgress.hide()
-                    self.HandleLogout()
-                    self.LoginRegister.selectedSegmentIndex = 0
-                    self.SetSelectedIndex()
-                    self.ClearTextFieldf()
-                    
+                            userreferences.updateChildValues(values as [AnyHashable : Any], withCompletionBlock: { (error, ref) in
+                                if error != nil
+                                {
+                                    self.Alert(title: "Error", message: "\(String(describing: error!.localizedDescription))", prefferedstyle: .alert)
+                                }
+                                
+                                
+                                print("Save Data Successfully with userId : \(String(describing: user!.user.uid))")
+                                
+                                MKProgress.hide()
+                                self.HandleLogout()
+                                self.LoginRegister.selectedSegmentIndex = 0
+                                self.SetSelectedIndex()
+                                self.ClearTextFieldf()
+                                
+                            })
+                            
+                        })
                     })
+                }
+                
                 })
             }
-        
+
     }
     
     func HandleLogout()
@@ -195,6 +237,7 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate {
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.sourceType = .photoLibrary
+        picker.allowsEditing = true
         self.present(picker, animated: true, completion: nil)
     }
     
