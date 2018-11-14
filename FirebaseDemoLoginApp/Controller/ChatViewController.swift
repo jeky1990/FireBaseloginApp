@@ -11,15 +11,18 @@ import Firebase
 
 class ChatViewController: UIViewController {
 
+    var user : UserModel?
     @IBOutlet weak var StackView: UIStackView!
     @IBOutlet weak var ScrollView: UIScrollView!
     @IBOutlet weak var EnterMessage: UITextField!
     
+    @IBOutlet weak var NavItem: UINavigationItem!
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        SetKeyboardNotification()
         
+        SetKeyboardNotification()
+        NavItem.title = user?.name
+        EnterMessage.becomeFirstResponder()
     }
     
     @IBAction func CancelAction(_ sender: Any)
@@ -34,11 +37,37 @@ class ChatViewController: UIViewController {
     
     func SendMessageUsingFirebase()
     {
-        EnterMessage.text = ""
         let ref = Database.database().reference().child("Messages")
         let childref = ref.childByAutoId()
-        let value = ["textMsg":EnterMessage.text!]
-        childref.updateChildValues(value)
+        let toid = user!.uid!
+        let fromid = Auth.auth().currentUser!.uid
+//        let date = Date()
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "dd/MM HH:mm"
+//        let someDateTime = String(formatter.string(from: date))
+        
+        let someDateTime = Int(Date().timeIntervalSince1970)
+        let value = ["textMsg":EnterMessage.text!,"toid":toid,"fromid":fromid,"date":someDateTime] as [String : Any]
+        
+        //childref.updateChildValues(value)
+        
+        childref.updateChildValues(value) { (error, ref) in
+            if error != nil {
+                print(error ?? "")
+                return
+            }
+            
+            guard let messageId = childref.key else { return }
+            
+            let userMessagesRef = Database.database().reference().child("user-messages").child(fromid).child(messageId)
+            userMessagesRef.setValue(1)
+            
+            let recipientUserMessagesRef = Database.database().reference().child("user-messages").child(toid).child(messageId)
+            recipientUserMessagesRef.setValue(1)
+        }
+        
+        EnterMessage.text = ""
+        EnterMessage.resignFirstResponder()
     }
     
     func SetKeyboardNotification()

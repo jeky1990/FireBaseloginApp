@@ -10,6 +10,7 @@
 		3D9E1C16A73CE11812ED1BC2 /* Pods_FirebaseDemoLoginAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 10C038AB3E2F57E6FC73AE60 /* Pods_FirebaseDemoLoginAppTests.framework */; };
 		6ADDA670C9C1380420D54642 /* Pods_FirebaseDemoLoginAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAC8C4561432E057DAF26B5A /* Pods_FirebaseDemoLoginAppUITests.framework */; };
 		A4A29B7C02915873C9575F3C /* Pods_FirebaseDemoLoginApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB05B90F980F1E34E90CB4FF /* Pods_FirebaseDemoLoginApp.framework */; };
+		FA09BA23219BF85B00F5EEC3 /* MessageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA09BA22219BF85B00F5EEC3 /* MessageModel.swift */; };
 		FA707069219AA88400587729 /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA707068219AA88400587729 /* UserModel.swift */; };
 		FA70706B219AA99200587729 /* AllUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA70706A219AA99200587729 /* AllUsersViewController.swift */; };
 		FA70706E219AE6EA00587729 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA70706D219AE6EA00587729 /* Extension.swift */; };
@@ -52,6 +53,7 @@
 		DA672061164E88DCE0CBAEB1 /* Pods-FirebaseDemoLoginApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FirebaseDemoLoginApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FirebaseDemoLoginApp/Pods-FirebaseDemoLoginApp.debug.xcconfig"; sourceTree = "<group>"; };
 		EAC8C4561432E057DAF26B5A /* Pods_FirebaseDemoLoginAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FirebaseDemoLoginAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0EFAC90D247491F71FDCA0E /* Pods-FirebaseDemoLoginAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FirebaseDemoLoginAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FirebaseDemoLoginAppTests/Pods-FirebaseDemoLoginAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		FA09BA22219BF85B00F5EEC3 /* MessageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageModel.swift; sourceTree = "<group>"; };
 		FA707068219AA88400587729 /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		FA70706A219AA99200587729 /* AllUsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllUsersViewController.swift; sourceTree = "<group>"; };
 		FA70706D219AE6EA00587729 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
@@ -124,9 +126,27 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		FA09BA1F219BE1D700F5EEC3 /* StoryBoard */ = {
+			isa = PBXGroup;
+			children = (
+				FA7ADFA0218D824C00BB5A53 /* Main.storyboard */,
+				FA7ADFA5218D824D00BB5A53 /* LaunchScreen.storyboard */,
+			);
+			path = StoryBoard;
+			sourceTree = "<group>";
+		};
+		FA09BA21219BE21100F5EEC3 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				FA7ADFA3218D824D00BB5A53 /* Assets.xcassets */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
 		FA707065219AA84700587729 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				FA7ADF9C218D824B00BB5A53 /* AppDelegate.swift */,
 				FA7ADF9E218D824C00BB5A53 /* ViewController.swift */,
 				FA890BA2218F148600B7D25D /* MainPageViewController.swift */,
 				FA70706A219AA99200587729 /* AllUsersViewController.swift */,
@@ -139,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				FA707068219AA88400587729 /* UserModel.swift */,
+				FA09BA22219BF85B00F5EEC3 /* MessageModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -176,15 +197,13 @@
 		FA7ADF9B218D824B00BB5A53 /* FirebaseDemoLoginApp */ = {
 			isa = PBXGroup;
 			children = (
+				FA7ADFA8218D824D00BB5A53 /* Info.plist */,
+				FA7ADFCA218DAD8200BB5A53 /* GoogleService-Info.plist */,
+				FA09BA21219BE21100F5EEC3 /* Assets */,
+				FA09BA1F219BE1D700F5EEC3 /* StoryBoard */,
 				FA70706C219AE6C700587729 /* Extension */,
 				FA707066219AA86000587729 /* Model */,
 				FA707065219AA84700587729 /* Controller */,
-				FA7ADF9C218D824B00BB5A53 /* AppDelegate.swift */,
-				FA7ADFA0218D824C00BB5A53 /* Main.storyboard */,
-				FA7ADFA3218D824D00BB5A53 /* Assets.xcassets */,
-				FA7ADFA5218D824D00BB5A53 /* LaunchScreen.storyboard */,
-				FA7ADFA8218D824D00BB5A53 /* Info.plist */,
-				FA7ADFCA218DAD8200BB5A53 /* GoogleService-Info.plist */,
 			);
 			path = FirebaseDemoLoginApp;
 			sourceTree = "<group>";
@@ -446,6 +465,7 @@
 				FA7ADF9F218D824C00BB5A53 /* ViewController.swift in Sources */,
 				FA890BA3218F148600B7D25D /* MainPageViewController.swift in Sources */,
 				FA707070219AFFD700587729 /* ChatViewController.swift in Sources */,
+				FA09BA23219BF85B00F5EEC3 /* MessageModel.swift in Sources */,
 				FA70706E219AE6EA00587729 /* Extension.swift in Sources */,
 				FA707069219AA88400587729 /* UserModel.swift in Sources */,
 				FA7ADF9D218D824B00BB5A53 /* AppDelegate.swift in Sources */,

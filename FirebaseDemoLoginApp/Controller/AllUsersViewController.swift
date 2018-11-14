@@ -32,7 +32,9 @@ class AllUsersViewController: UIViewController {
             
             if let dictionary = snapshot.value as? [String:AnyObject]
             {
+                
                 let user = UserModel(dictionary: dictionary)
+                user.uid = snapshot.key
             
 //                user.name = dictionary["name"] as? String
 //                user.email = dictionary["email"] as? String
@@ -62,6 +64,16 @@ extension AllUsersViewController : UITableViewDelegate,UITableViewDataSource
         cell.ProfileImageView.layer.cornerRadius = 20
         cell.ProfileImageView.clipsToBounds = true
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let Alluser = AllUsersArray[indexPath.row]
+        
+        let nav = self.storyboard?.instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
+        
+        nav.user = Alluser
+        
+        self.navigationController?.pushViewController(nav, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

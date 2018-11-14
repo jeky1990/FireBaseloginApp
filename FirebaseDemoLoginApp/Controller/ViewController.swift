@@ -144,7 +144,7 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate {
                     self.Alert(title: "Error", message: "\(String(describing: error!.localizedDescription))", prefferedstyle: .alert)
                 }
                 
-                let ref = Database.database().reference(fromURL: "https://fcmdatabase-63dd0.firebaseio.com/")
+                let ref = Database.database().reference()
                 
                 guard (user?.user.uid) != nil else
                 {
@@ -158,7 +158,7 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate {
                 let imagename = NSUUID().uuidString
                 let Storageref = Storage.storage().reference().child("\(imagename).jpg")
                 
-                if let profileImage = self.ProfileImage.image?.jpegData(compressionQuality: 0.3)
+                if let profileImage = self.ProfileImage.image?.jpegData(compressionQuality: 0.5)
                 {
                     Storageref.putData(profileImage, metadata: nil, completion: { (metadata, err) in
                         if error != nil
