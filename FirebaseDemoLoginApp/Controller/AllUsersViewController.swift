@@ -8,10 +8,12 @@
 
 import UIKit
 import Firebase
+import Kingfisher
 
 class AllUsersViewController: UIViewController {
     
     var AllUsersArray : [UserModel] = []
+    
     @IBOutlet weak var UserTable: UITableView!
     
     override func viewDidLoad() {
@@ -36,8 +38,6 @@ class AllUsersViewController: UIViewController {
                 let user = UserModel(dictionary: dictionary)
                 user.uid = snapshot.key
             
-//                user.name = dictionary["name"] as? String
-//                user.email = dictionary["email"] as? String
                 self.AllUsersArray.append(user)
                 
                 DispatchQueue.main.async {
@@ -60,7 +60,11 @@ extension AllUsersViewController : UITableViewDelegate,UITableViewDataSource
         let Alluser = AllUsersArray[indexPath.row]
         cell.NameLabel.text = Alluser.name
         cell.EmailLabel.text = Alluser.email
-        cell.ProfileImageView.LoadImageUsingCache(Urlstring: Alluser.ProfileImageURL!)
+        //cell.ProfileImageView.LoadImageUsingCache(Urlstring: Alluser.ProfileImageURL!)
+        let url = URL(string: Alluser.ProfileImageURL!)
+        let resource = ImageResource(downloadURL:url!, cacheKey: Alluser.ProfileImageURL)
+        cell.ProfileImageView.kf.setImage(with: resource)
+        
         cell.ProfileImageView.layer.cornerRadius = 20
         cell.ProfileImageView.clipsToBounds = true
         return cell
@@ -68,12 +72,21 @@ extension AllUsersViewController : UITableViewDelegate,UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let Alluser = AllUsersArray[indexPath.row]
+        let uid = Alluser.uid
         
-        let nav = self.storyboard?.instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
-        
-        nav.user = Alluser
-        
-        self.navigationController?.pushViewController(nav, animated: true)
+        let ref = Database.database().reference().child("users").child(uid!)
+        ref.observe(.value, with: { (snapshot) in
+            
+            let userdetail = snapshot.value as? [String:AnyObject]
+            
+            let nav = self.storyboard?.instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
+            nav.userdic = userdetail!
+            nav.user = Alluser
+
+            self.navigationController?.pushViewController(nav, animated: true)
+            
+        }, withCancel: nil)
+
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -94,4 +107,5 @@ class UserTableCell : UITableViewCell
     @IBOutlet weak var EmailLabel: UILabel!
     @IBOutlet weak var NameLabel: UILabel!
     @IBOutlet weak var ProfileImageView: UIImageView!
+   
 }

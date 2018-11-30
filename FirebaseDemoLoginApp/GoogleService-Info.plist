@@ -7,34 +7,34 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>981647021436-i4eh93vpr0j96v396erktn3g9069om9g.apps.googleusercontent.com</string>
+	<string>1038443383133-npdond10f9vd47c2dea6r53u8hi0t024.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.981647021436-i4eh93vpr0j96v396erktn3g9069om9g</string>
+	<string>com.googleusercontent.apps.1038443383133-npdond10f9vd47c2dea6r53u8hi0t024</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCFX8ESiF--ah4_yhQkoNZhnq2FuCRvpLc</string>
+	<string>AIzaSyD9lwqn6WKrBZb_k8tNuOmC2T2QBXq4SyE</string>
 	<key>GCM_SENDER_ID</key>
-	<string>981647021436</string>
+	<string>1038443383133</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.FirebaseDemoLoginApp</string>
+	<string>com123.FirebaseDemoLoginApp</string>
 	<key>PROJECT_ID</key>
-	<string>fcmdatabase-63dd0</string>
+	<string>newfbdmlogiapp</string>
 	<key>STORAGE_BUCKET</key>
-	<string>fcmdatabase-63dd0.appspot.com</string>
+	<string>newfbdmlogiapp.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:981647021436:ios:2e0a7a4b2df25925</string>
+	<string>1:1038443383133:ios:5c76c6d0648c1c18</string>
 	<key>DATABASE_URL</key>
-	<string>https://fcmdatabase-63dd0.firebaseio.com/</string>
+	<string>https://newfbdmlogiapp.firebaseio.com</string>
 </dict>
 </plist>

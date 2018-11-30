@@ -13,6 +13,7 @@ import MKProgress
 
 class ViewController: UIViewController,UIImagePickerControllerDelegate {
     
+    
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var ScrollView: UIScrollView!
     @IBOutlet weak var LoginRegister: UISegmentedControl!
@@ -178,8 +179,7 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate {
                                 {
                                     self.Alert(title: "Error", message: "\(String(describing: error!.localizedDescription))", prefferedstyle: .alert)
                                 }
-                                
-                                
+                            
                                 print("Save Data Successfully with userId : \(String(describing: user!.user.uid))")
                                 
                                 MKProgress.hide()

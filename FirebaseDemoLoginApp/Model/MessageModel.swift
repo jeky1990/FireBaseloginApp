@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Firebase
 
 class MessageModel : NSObject {
     
@@ -14,11 +15,20 @@ class MessageModel : NSObject {
     let fromid : String?
     let txtMsg : String?
     let date : NSNumber?
+    let imageUrl: String?
     
     init(dictionary: [AnyHashable:Any]) {
+        
         self.toid = dictionary["toid"] as? String
         self.fromid = dictionary["fromid"] as? String
         self.date = dictionary["date"] as? NSNumber
         self.txtMsg = dictionary["textMsg"] as? String
+        self.imageUrl = dictionary["imageUrl"] as? String
     }
+    
+    func chatPartnerId()-> String?
+    {
+        return fromid == Auth.auth().currentUser?.uid ? toid : fromid
+    }
+
 }

@@ -15,8 +15,11 @@ class MainPageViewController: UIViewController {
     @IBOutlet weak var AllMessagetable: UITableView!
     @IBOutlet weak var NavItemView: UIView!
     @IBOutlet weak var NavItemLabelView: UILabel!
-  
     @IBOutlet weak var NavItem: UINavigationItem!
+    
+    var AllUsersArray : [UserModel] = []
+    var messages = [MessageModel]()
+    var messagesDictionary = [String: MessageModel]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +27,7 @@ class MainPageViewController: UIViewController {
         GetSingleUserData()
         //AddTapGesture()
         //FetchMessage()
+        FetchUserData()
         messages.removeAll()
         messagesDictionary.removeAll()
         observeUserMessages()
@@ -37,11 +41,9 @@ class MainPageViewController: UIViewController {
         observeUserMessages()
         AllMessagetable.reloadData()
     }
-    
-    var messages = [MessageModel]()
-    var messagesDictionary = [String: MessageModel]()
-    
+
     func observeUserMessages() {
+    
         guard let uid = Auth.auth().currentUser?.uid else {
             return
         }
@@ -58,8 +60,8 @@ class MainPageViewController: UIViewController {
                 {
                     let message = MessageModel(dictionary: dictionary)
                     
-                    if let toId = message.toid {
-                        self.messagesDictionary[toId] = message
+                    if let chatpartnetId = message.chatPartnerId() {
+                        self.messagesDictionary[chatpartnetId] = message
                         
                         self.messages = Array(self.messagesDictionary.values)
                         self.messages.sort(by: { (message1, message2) -> Bool in
@@ -156,16 +158,32 @@ class MainPageViewController: UIViewController {
                 if let dictionary = snapshot.value as? [String:AnyObject]
                 {
                     self.NavItemLabelView.text = dictionary["name"] as? String
-
+                    
                 }
                 
             }, withCancel: nil)
         }
     }
+    
     @IBAction func AllUsers(_ sender: Any)
     {
         let nav = self.storyboard?.instantiateViewController(withIdentifier: "AllUsersViewController")
         self.navigationController?.pushViewController(nav!, animated: true)
+    }
+    
+    func FetchUserData()
+    {
+        Database.database().reference().child("users").observe(.childAdded, with: { (snapshot) in
+            
+            if let dictionary = snapshot.value as? [String:AnyObject]
+            {
+                
+                let user = UserModel(dictionary: dictionary)
+                user.uid = snapshot.key
+                self.AllUsersArray.append(user)
+            
+            }
+        }, withCancel: nil)
     }
 }
 
@@ -178,16 +196,8 @@ extension MainPageViewController : UITableViewDelegate,UITableViewDataSource
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MessageTableCell
         let message = messages[indexPath.row]
-        
-        let chatPartnerId: String?
-        
-        if message.fromid == Auth.auth().currentUser?.uid {
-            chatPartnerId = message.toid
-        } else {
-            chatPartnerId = message.fromid
-        }
-        
-        if let id = chatPartnerId
+    
+        if let id = message.chatPartnerId()
         {
             let ref = Database.database().reference().child("users").child(id)
             ref.observeSingleEvent(of: .value, with: { (snapshot) in
@@ -206,6 +216,42 @@ extension MainPageViewController : UITableViewDelegate,UITableViewDataSource
         }
        
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    
+        let message = messages[indexPath.row]
+        var userid : String?
+        
+        if Auth.auth().currentUser?.uid == message.toid
+        {
+            userid = message.fromid
+        }
+        else
+        {
+            userid = message.toid
+        }
+        
+        let ref = Database.database().reference().child("users").child(message.chatPartnerId()!)
+        ref.observe(.value, with: { (snapshot) in
+            
+            let userdetail = snapshot.value as? [String:AnyObject]
+            
+            for i in 0..<self.AllUsersArray.count
+            {
+                let element = self.AllUsersArray[i]
+                if element.uid == userid
+                {
+                    let nav = self.storyboard?.instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
+                    nav.userdic = userdetail!
+                    nav.user = element
+                    self.navigationController?.pushViewController(nav, animated: true)
+                    break
+                }
+            }
+        }, withCancel: nil)
+        
+        
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
